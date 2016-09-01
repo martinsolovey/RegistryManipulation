@@ -1,9 +1,9 @@
 ﻿namespace RegistryManipulationTests
 {
-    using HirokuScript.RegistryInteraction.Components;
     using HirokuScript.RegistryInteraction.Models;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Win32;
+    using RegistryManipulationDll.Components;
 
     [TestClass]
     public class RegistryFinderTests
@@ -24,6 +24,21 @@
         }
 
         [TestMethod]
+        public void GetStraightKey()
+        {
+            RegistryFinder finder = new RegistryFinder();
+            RegistryModel registry = new RegistryModel
+            {
+                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                RegistryName = "LogPixels"
+            };
+
+            RegistryKey value = finder.GetRegistryKeyFor(registry, Registry.CurrentUser);
+
+            Assert.IsTrue(value.ContainsKey(registry.RegistryName));
+        }
+
+        [TestMethod]
         public void GetValueByRecursivity()
         {
             RegistryFinder finder = new RegistryFinder();
@@ -39,7 +54,22 @@
         }
 
         [TestMethod]
-        public void GetValueByRecursivity2()
+        public void GetRegistryKeyByRecursivity()
+        {
+            RegistryFinder finder = new RegistryFinder();
+            RegistryModel registry = new RegistryModel
+            {
+                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                RegistryName = "LogPixels"
+            };
+
+            RegistryKey value = finder.GetRegistryKeyFor(registry);
+
+            Assert.IsTrue(value.ContainsKey(registry.RegistryName));
+        }
+
+        [TestMethod]
+        public void GetRegistryKeyByRecursivity2()
         {
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
@@ -47,9 +77,9 @@
                 RegistryName = "LogPixels"
             };
 
-            object value = finder.GetValueFrom(registry);
+            RegistryKey value = finder.GetRegistryKeyFor(registry);
 
-            Assert.IsNotNull(value);
+            Assert.IsTrue(value.ContainsKey(registry.RegistryName));
         }
     }
 }
