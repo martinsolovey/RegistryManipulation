@@ -7,10 +7,12 @@
 
     public class RegistryFinder : IRegistryFinder
     {
+        private bool _writable;
         private RegistryKey[] _startPoints;
 
-        public RegistryFinder()
+        public RegistryFinder(bool forReadOnly = false)
         {
+            _writable = !forReadOnly;
             _startPoints = new RegistryKey[]
             {
                 Registry.CurrentUser,
@@ -83,7 +85,7 @@
                 string[] subKeys = registry.SubKeysSeparatedBySlashes.Split('/');
 
                 foreach (string subKey in subKeys)
-                    startPoint = startPoint.OpenSubKey(subKey);
+                    startPoint = startPoint.OpenSubKey(subKey, _writable);
 
                 return startPoint;
             }
@@ -105,7 +107,7 @@
                 {
                     foreach (string subKey in startPoint.GetSubKeyNames())
                     {
-                        value = GetRegistryKeyWithRecursiveSearch(startPoint.OpenSubKey(subKey), registry);
+                        value = GetRegistryKeyWithRecursiveSearch(startPoint.OpenSubKey(subKey, _writable), registry);
 
                         if (value != null)
                             break;

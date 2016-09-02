@@ -1,19 +1,26 @@
 ﻿namespace RegistryManipulationDll.Components
 {
     using Contracts;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using HirokuScript.RegistryInteraction.Models;
-    using Microsoft.Win32;
 
     public class RegistryModifier : IRegistryModifier
     {
         public void Set(object value, RegistryModel registry)
         {
+            try
+            {
+                if (registry.SubKey == null)
+                {
+                    RegistryFinder finder = new RegistryFinder();
+                    registry.SubKey = finder.GetRegistryKeyFor(registry);
+                }
 
+                registry.SubKey.SetValue(registry.RegistryName, value, Microsoft.Win32.RegistryValueKind.String);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }
