@@ -64,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistryFileHandlerTests.cs" />
     <Compile Include="RegistryModifierTests.cs" />
+    <Compile Include="RegistryModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

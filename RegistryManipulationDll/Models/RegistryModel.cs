@@ -1,16 +1,45 @@
-﻿using Microsoft.Win32;
-
-namespace HirokuScript.RegistryInteraction.Models
+﻿namespace HirokuScript.RegistryInteraction.Models
 {
+    using Microsoft.Win32;
+    using RegistryManipulationDll.Components;
+    using System.Linq;
+
     /// <summary>
     /// Represents a Key in the Registry.
     /// </summary>
     public class RegistryModel
     {
+        public RegistryModel()
+        {
+
+        }
+
+        public RegistryModel(string stringPath)
+        {
+            var pathSplitted = stringPath.Split('/');
+
+            this.RegistryName = pathSplitted.Last();
+
+            if (Helper.RegistryHives.Contains(pathSplitted.First()))
+                this.SubKeysSeparatedBySlashes = stringPath.Substring(stringPath.IndexOf('/') + 1, stringPath.LastIndexOf('/') - stringPath.IndexOf('/') - 1);
+            else
+                this.SubKeysSeparatedBySlashes = stringPath.Substring(0, stringPath.LastIndexOf('/'));
+        }
+
         /// <summary>
         /// Represents the path of the desired registry keyValue.
         /// </summary>
-        public RegistryKey SubKey { get; set; }
+        public RegistryKey SubKey
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(SubKeysSeparatedBySlashes))
+                    return null;
+
+                var finder = new RegistryFinder();
+                return finder.GetRegistryKeyFor(this);
+            }
+        }
 
         /// <summary>
         /// Represents the path of the desired registry key.
@@ -23,14 +52,23 @@ namespace HirokuScript.RegistryInteraction.Models
         /// </summary>
         public string RegistryName { get; set; }
 
-        public string FullKeyName
+        public bool IsSubKeyReal
         {
             get
             {
-                if (string.IsNullOrEmpty(RegistryName) || string.IsNullOrEmpty(SubKeysSeparatedBySlashes))
-                    return string.Empty;
+                return SubKey != null;
+            }
+        }
 
-                return string.Format("{0}/{1}", SubKeysSeparatedBySlashes, RegistryName);
+        public bool IsRegistryReal
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(RegistryName))
+                    return false;
+
+                var finder = new RegistryFinder();
+                return finder.GetValueFrom(this) != null;
             }
         }
     }

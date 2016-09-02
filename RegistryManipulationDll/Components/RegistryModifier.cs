@@ -2,6 +2,7 @@
 {
     using Contracts;
     using HirokuScript.RegistryInteraction.Models;
+    using Microsoft.Win32;
 
     public class RegistryModifier : IRegistryModifier
     {
@@ -9,13 +10,10 @@
         {
             try
             {
-                if (registry.SubKey == null)
-                {
-                    RegistryFinder finder = new RegistryFinder();
-                    registry.SubKey = finder.GetRegistryKeyFor(registry);
-                }
+                //TODO: Pick the proper type set depending the object.
+                var type = RegistryValueKind.String;
 
-                registry.SubKey.SetValue(registry.RegistryName, value, Microsoft.Win32.RegistryValueKind.String);
+                registry.SubKey.SetValue(registry.RegistryName, value, type);
             }
             catch
             {
