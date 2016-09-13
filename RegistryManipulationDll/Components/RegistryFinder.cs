@@ -118,7 +118,14 @@
                 string[] subKeys = registry.SubKeysSeparatedBySlashes.Split('/');
 
                 foreach (string subKey in subKeys)
-                    startPoint = startPoint.OpenSubKey(subKey, _writable);
+                {
+                    var tempSubKey = startPoint.OpenSubKey(subKey, _writable);
+
+                    if (tempSubKey == null)
+                        break;
+                    else
+                        startPoint = tempSubKey;
+                }
 
                 return startPoint;
             }
@@ -157,6 +164,9 @@
 
         private object GetValueFromRegistryKey(RegistryKey key, RegistryModel registry)
         {
+            if (key == null)
+                return null;
+
             return key.GetValue(registry.RegistryName);
         }
     }

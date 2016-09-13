@@ -45,7 +45,18 @@
         /// Represents the path of the desired registry key.
         /// Example: For the "HKEY_CURRENT_USER/Environment" is the path for the key "TEMP"
         /// </summary>
-        public string SubKeysSeparatedBySlashes { get; set; }
+        private string _subKeySeparatedBySlashes;
+        public string SubKeysSeparatedBySlashes
+        {
+            get { return _subKeySeparatedBySlashes; }
+            set
+            {
+                if (!value.Contains("/") && value.Contains("\\"))
+                    throw new InvalidRegistryModelException();
+
+                _subKeySeparatedBySlashes = value;
+            }
+        }
 
         /// <summary>
         /// Represents a RegistryKey, using the example of the SubKeysSeparatedBySlashes documentation, RegistryName would be "TEMP"

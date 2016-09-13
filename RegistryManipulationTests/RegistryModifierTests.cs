@@ -8,7 +8,7 @@
     public class RegistryModifierTests
     {
         [TestMethod]
-        public void ChangeRegistry()
+        public void ChangeRegistryTest()
         {
             var finder = new RegistryFinder();
             var modifier = new RegistryModifier();
@@ -29,6 +29,17 @@
 
             afterValue = new RegistryFinder().GetValueFrom(registry);
             Assert.IsTrue((string)afterValue == "96");
+        }
+
+        [TestMethod]
+        public void CreationRegistryTest()
+        {
+            RegistryModel registry = new RegistryModel();
+            registry.SubKeysSeparatedBySlashes = "HKEY_CURRENT_USER/SOFTWARE/RegistryManipulationAPI";
+            registry.RegistryName = "TestRegistry";
+
+            var modifier = new RegistryModifier();
+            modifier.Create(true, registry);
         }
     }
 }

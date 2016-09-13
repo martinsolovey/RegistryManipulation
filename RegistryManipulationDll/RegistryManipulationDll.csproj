@@ -47,6 +47,7 @@
     <Compile Include="Contracts\IRegistryFinder.cs" />
     <Compile Include="Contracts\IRegistryModifier.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Models\Exceptions\InvalidRegistryModelException.cs" />
     <Compile Include="Models\RegistryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -9,6 +9,11 @@
         {
             return value.GetValueNames().Contains(key);
         }
+
+        public static RegistryKey GoBack(this RegistryKey value)
+        {
+            return null; 
+        }
     }
 
     public static class Helper

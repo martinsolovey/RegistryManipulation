@@ -20,5 +20,19 @@
                 throw;
             }
         }
+
+        public void Create(object value, RegistryModel registry)
+        {
+            if (registry.IsRegistryReal)
+                return;
+
+            //If the subKey exists, let's create our entry.
+            if (registry.IsSubKeyReal)
+            {
+                registry.SubKey.CreateSubKey(registry.RegistryName, RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
+                registry.SubKey.SetValue(registry.RegistryName, value);
+            }
+
+        }
     }
 }
