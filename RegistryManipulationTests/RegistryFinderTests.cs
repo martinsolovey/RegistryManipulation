@@ -14,7 +14,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 
@@ -29,7 +29,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 
@@ -44,7 +44,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "UnexistingKey"
             };
 
@@ -59,7 +59,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 
@@ -74,13 +74,14 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Unexistingshit",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Unexistingshit",
                 RegistryName = "UnexistingKey"
             };
 
             RegistryKey value = finder.GetRegistryKeyFor(registry, Registry.CurrentUser);
 
-            Assert.IsNull(value);
+            Assert.IsNull(registry.SubKey);
+            Assert.IsFalse(registry.IsRegistryReal);
         }
 
         [TestMethod]
@@ -89,7 +90,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 
@@ -104,7 +105,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 
@@ -119,7 +120,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 
@@ -148,7 +149,7 @@
             RegistryFinder finder = new RegistryFinder();
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 

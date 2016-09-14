@@ -15,7 +15,7 @@
 
             RegistryModel registry = new RegistryModel
             {
-                SubKeysSeparatedBySlashes = "Control Panel/Desktop",
+                SubKeySeparatedByBackSlashes = "Control Panel\\Desktop",
                 RegistryName = "LogPixels"
             };
 
@@ -34,12 +34,22 @@
         [TestMethod]
         public void CreationRegistryTest()
         {
-            RegistryModel registry = new RegistryModel();
-            registry.SubKeysSeparatedBySlashes = "HKEY_CURRENT_USER/SOFTWARE/RegistryManipulationAPI";
+            RegistryModel registry = new RegistryModel("HKEY_CURRENT_USER\\SOFTWARE\\RegistryManipulationAPI");
             registry.RegistryName = "TestRegistry";
+            registry.SubKeySeparatedByBackSlashes = "HKEY_CURRENT_USER\\SOFTWARE\\RegistryManipulationAPI";
 
             var modifier = new RegistryModifier();
-            modifier.Create(true, registry);
+
+            Assert.IsFalse(registry.IsRegistryReal);
+
+            modifier.Create(new
+            {
+                Installed = true
+            }, registry);
+
+            Assert.IsTrue(registry.IsRegistryReal);
+
+            registry.SubKey.DeleteEntireTree();
         }
     }
 }

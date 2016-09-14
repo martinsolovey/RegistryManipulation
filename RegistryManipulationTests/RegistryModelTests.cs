@@ -9,7 +9,7 @@
         [TestMethod]
         public void ConstructorTest1()
         {
-            string path = "HKEY_CURRENT_USER/Control Panel/Desktop/BlockSendInputResets";
+            string path = "HKEY_CURRENT_USER\\Control Panel\\Desktop\\BlockSendInputResets";
 
             var model = new RegistryModel(path);
 
@@ -20,7 +20,7 @@
         [TestMethod]
         public void ConstructorTest2()
         {
-            string path = "Control Panel/Desktop/BlockSendInputResets";
+            string path = "Control Panel\\Desktop\\BlockSendInputResets";
 
             var model = new RegistryModel(path);
 

@@ -4,7 +4,6 @@
     using HirokuScript.RegistryInteraction.Models;
     using Microsoft.Win32;
     using System;
-    using System.Linq;
 
     public class RegistryFinder : IRegistryFinder
     {
@@ -48,9 +47,9 @@
                 throw new Exception();
 
             //Checking that SubKey does not include the RegistryHive.
-            var firstSplit = registry.SubKeysSeparatedBySlashes.Substring(0, registry.SubKeysSeparatedBySlashes.IndexOf('/'));
-            if (_startPoints.Any(x => x.ToString() == firstSplit))
-                registry.SubKeysSeparatedBySlashes = registry.SubKeysSeparatedBySlashes.Remove(0, registry.SubKeysSeparatedBySlashes.IndexOf('/') + 1);
+            //var firstSplit = registry.SubKeySeparatedByBackSlashes.Substring(0, registry.SubKeySeparatedByBackSlashes.IndexOf('\\'));
+            //if (_startPoints.Any(x => x.ToString() == firstSplit))
+            //    registry.SubKeySeparatedByBackSlashes = registry.SubKeySeparatedByBackSlashes.Remove(0, registry.SubKeySeparatedByBackSlashes.IndexOf('\\') + 1);
 
             if (startPoint == null)
                 foreach (var searchPoint in _startPoints)
@@ -61,7 +60,7 @@
                         return value;
                 }
 
-            RegistryKey pathToRegistry = string.IsNullOrEmpty(registry.SubKeysSeparatedBySlashes)
+            RegistryKey pathToRegistry = string.IsNullOrEmpty(registry.SubKeySeparatedByBackSlashes)
                 ? GetRegistryKeyWithRecursiveSearch(startPoint, registry)
                 : GetStraightRegistryKey(startPoint, registry);
 
@@ -93,18 +92,18 @@
         public RegistryKey GetRegistryKeyFor(RegistryModel registry, RegistryKey startPoint = null)
         {
             if (string.IsNullOrEmpty(registry.RegistryName))
-                throw new Exception();
+                return null;
 
             if (startPoint == null)
                 foreach (var searchPoint in _startPoints)
                 {
                     RegistryKey value = GetRegistryKeyFor(registry, searchPoint);
 
-                    if (value != null)
+                    if (value != null || registry.SubKeySeparatedByBackSlashes.Contains(searchPoint.Name))
                         return value;
                 }
 
-            RegistryKey pathToRegistry = string.IsNullOrEmpty(registry.SubKeysSeparatedBySlashes)
+            RegistryKey pathToRegistry = string.IsNullOrEmpty(registry.SubKeySeparatedByBackSlashes)
                 ? GetRegistryKeyWithRecursiveSearch(startPoint, registry)
                 : GetStraightRegistryKey(startPoint, registry);
 
@@ -115,17 +114,29 @@
         {
             try
             {
-                string[] subKeys = registry.SubKeysSeparatedBySlashes.Split('/');
+                string[] subKeys = registry.SubKeySeparatedByBackSlashes.Split('\\');
 
+                bool navigatedAllSubKeys = true;
                 foreach (string subKey in subKeys)
                 {
+                    if (startPoint.Name == subKey)
+                        continue;
+
                     var tempSubKey = startPoint.OpenSubKey(subKey, _writable);
+                    bool isKeyNotFolder = tempSubKey == null && startPoint.ContainsKey(subKey);
 
                     if (tempSubKey == null)
-                        break;
-                    else
+                    {
+                        registry.LastRealSubKey = startPoint;
+                        navigatedAllSubKeys = false;
+                    }
+
+                    if (!isKeyNotFolder)
                         startPoint = tempSubKey;
                 }
+
+                if (navigatedAllSubKeys)
+                    registry.LastRealSubKey = startPoint;
 
                 return startPoint;
             }

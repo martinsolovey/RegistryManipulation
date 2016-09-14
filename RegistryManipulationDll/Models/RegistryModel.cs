@@ -16,14 +16,20 @@
 
         public RegistryModel(string stringPath)
         {
-            var pathSplitted = stringPath.Split('/');
+            var pathSplitted = stringPath.Split('\\');
 
             this.RegistryName = pathSplitted.Last();
+            this.SubKeySeparatedByBackSlashes = stringPath;
 
-            if (Helper.RegistryHives.Contains(pathSplitted.First()))
-                this.SubKeysSeparatedBySlashes = stringPath.Substring(stringPath.IndexOf('/') + 1, stringPath.LastIndexOf('/') - stringPath.IndexOf('/') - 1);
-            else
-                this.SubKeysSeparatedBySlashes = stringPath.Substring(0, stringPath.LastIndexOf('/'));
+            //if (pathSplitted.Count() == 1)
+            //    this.SubKeySeparatedByBackSlashes = pathSplitted.First();
+            //else
+            //{
+            //    if (Helper.RegistryHives.Contains(pathSplitted.First()))
+            //        this.SubKeySeparatedByBackSlashes = stringPath.Substring(stringPath.IndexOf('\\') + 1, stringPath.LastIndexOf('\\') - stringPath.IndexOf('\\') - 1);
+            //    else
+            //        this.SubKeySeparatedByBackSlashes = stringPath.Substring(0, stringPath.LastIndexOf('\\'));
+            //}
         }
 
         /// <summary>
@@ -33,7 +39,7 @@
         {
             get
             {
-                if (string.IsNullOrEmpty(SubKeysSeparatedBySlashes))
+                if (string.IsNullOrEmpty(SubKeySeparatedByBackSlashes))
                     return null;
 
                 var finder = new RegistryFinder();
@@ -42,19 +48,28 @@
         }
 
         /// <summary>
+        /// Represents the Last Real Navigational SubKey.
+        /// It is posible when constructing Registries with this API, that the SubKey is not real yet.
+        /// </summary>
+        public RegistryKey LastRealSubKey { get; set; }
+
+        /// <summary>
         /// Represents the path of the desired registry key.
         /// Example: For the "HKEY_CURRENT_USER/Environment" is the path for the key "TEMP"
         /// </summary>
         private string _subKeySeparatedBySlashes;
-        public string SubKeysSeparatedBySlashes
+        public string SubKeySeparatedByBackSlashes
         {
             get { return _subKeySeparatedBySlashes; }
             set
             {
-                if (!value.Contains("/") && value.Contains("\\"))
+                if (value.Contains("/") && !value.Contains("\\"))
                     throw new InvalidRegistryModelException();
 
                 _subKeySeparatedBySlashes = value;
+
+                //triggers initialization.
+                var a = this.SubKey;
             }
         }
 

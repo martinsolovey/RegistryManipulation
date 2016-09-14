@@ -3,6 +3,7 @@
     using Contracts;
     using HirokuScript.RegistryInteraction.Models;
     using Microsoft.Win32;
+    using System.Linq;
 
     public class RegistryModifier : IRegistryModifier
     {
@@ -32,7 +33,18 @@
                 registry.SubKey.CreateSubKey(registry.RegistryName, RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryOptions.None);
                 registry.SubKey.SetValue(registry.RegistryName, value);
             }
+            else
+            {
+                //Let's create the Sub SubKey before.
+                string lastRealSubKeyName = registry.LastRealSubKey.Name;
+                var subKeyToCreate = registry.SubKeySeparatedByBackSlashes.Remove(0, lastRealSubKeyName.Count());
 
+                while (subKeyToCreate[0] == '\\')
+                    subKeyToCreate = subKeyToCreate.Remove(0, 1);
+
+                registry.LastRealSubKey.CreateSubKey(subKeyToCreate, RegistryKeyPermissionCheck.ReadWriteSubTree);
+                Create(value, registry);
+            }
         }
     }
 }
