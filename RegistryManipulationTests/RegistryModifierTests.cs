@@ -34,7 +34,7 @@
         [TestMethod]
         public void CreationRegistryTest()
         {
-            RegistryModel registry = new RegistryModel("HKEY_CURRENT_USER\\SOFTWARE\\RegistryManipulationAPI");
+            RegistryModel registry = new RegistryModel();
             registry.RegistryName = "TestRegistry";
             registry.SubKeySeparatedByBackSlashes = "HKEY_CURRENT_USER\\SOFTWARE\\RegistryManipulationAPI";
 

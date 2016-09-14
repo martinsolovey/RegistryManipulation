@@ -14,22 +14,17 @@
 
         }
 
-        public RegistryModel(string stringPath)
+        /// <summary>
+        /// Constructor for a RegistryModel
+        /// </summary>
+        /// <param name="keyString">It represents the entire string for the desired Registry (existing or not)
+        /// Example: "HKEY_CURRENT_USER\Control Panel\Accessibility\MessageDuration"</param>
+        public RegistryModel(string keyString)
         {
-            var pathSplitted = stringPath.Split('\\');
+            var pathSplitted = keyString.Split('\\');
 
             this.RegistryName = pathSplitted.Last();
-            this.SubKeySeparatedByBackSlashes = stringPath;
-
-            //if (pathSplitted.Count() == 1)
-            //    this.SubKeySeparatedByBackSlashes = pathSplitted.First();
-            //else
-            //{
-            //    if (Helper.RegistryHives.Contains(pathSplitted.First()))
-            //        this.SubKeySeparatedByBackSlashes = stringPath.Substring(stringPath.IndexOf('\\') + 1, stringPath.LastIndexOf('\\') - stringPath.IndexOf('\\') - 1);
-            //    else
-            //        this.SubKeySeparatedByBackSlashes = stringPath.Substring(0, stringPath.LastIndexOf('\\'));
-            //}
+            this.SubKeySeparatedByBackSlashes = keyString;
         }
 
         /// <summary>
