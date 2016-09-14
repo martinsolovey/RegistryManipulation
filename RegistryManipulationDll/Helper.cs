@@ -17,6 +17,25 @@
             return new RegistryFinder().GetRegistryKeyFor(new RegistryModel(lastKeyString));
         }
 
+        public static bool TryGetValue(this RegistryKey value, string keyName, out object keyValue)
+        {
+            keyValue = value.GetValue(keyName);
+
+            return keyValue != null;
+        }
+
+        public static bool TryGetSubKey(this RegistryKey value, string subKeyName, out RegistryKey subKey)
+        {
+            subKey = value.OpenSubKey(subKeyName, true);
+
+            return subKey != null;
+        }
+
+        public static bool ContainsSubKey(this RegistryKey value, string subKeyName)
+        {
+            return value.GetSubKeyNames().Contains(subKeyName);
+        }
+
         public static bool ContainsKey(this RegistryKey value, string key)
         {
             return value.GetValueNames().Contains(key);

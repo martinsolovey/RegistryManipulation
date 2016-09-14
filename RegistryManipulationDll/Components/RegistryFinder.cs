@@ -91,9 +91,6 @@
         /// <returns>The value of the RegistryKey, if there is no registry, it retrieves null.</returns>
         public RegistryKey GetRegistryKeyFor(RegistryModel registry, RegistryKey startPoint = null)
         {
-            if (string.IsNullOrEmpty(registry.RegistryName))
-                return null;
-
             if (startPoint == null)
                 foreach (var searchPoint in _startPoints)
                 {

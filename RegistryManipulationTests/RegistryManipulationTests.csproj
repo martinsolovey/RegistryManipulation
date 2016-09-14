@@ -65,6 +65,7 @@
     <Compile Include="RegistryFileHandlerTests.cs" />
     <Compile Include="RegistryModifierTests.cs" />
     <Compile Include="RegistryModelTests.cs" />
+    <Compile Include="ExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

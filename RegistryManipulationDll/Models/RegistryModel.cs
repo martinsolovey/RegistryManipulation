@@ -19,12 +19,19 @@
         /// </summary>
         /// <param name="keyString">It represents the entire string for the desired Registry (existing or not)
         /// Example: "HKEY_CURRENT_USER\Control Panel\Accessibility\MessageDuration"</param>
-        public RegistryModel(string keyString)
+        public RegistryModel(string keyString, bool containsKey = true)
         {
-            var pathSplitted = keyString.Split('\\');
+            if (containsKey)
+            {
+                var pathSplitted = keyString.Split('\\');
 
-            this.RegistryName = pathSplitted.Last();
-            this.SubKeySeparatedByBackSlashes = keyString;
+                this.RegistryName = pathSplitted.Last();
+                this.SubKeySeparatedByBackSlashes = keyString;
+            }
+            else
+            {
+                this.SubKeySeparatedByBackSlashes = keyString;
+            }
         }
 
         /// <summary>
